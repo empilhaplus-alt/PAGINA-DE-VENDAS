@@ -1,7 +1,7 @@
 import React from 'react';
-import { CheckCircle, Gift, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { CheckCircle, Gift, ArrowRight, ShieldCheck, Zap, Package } from 'lucide-react';
 
-// Reutilizando o hook de countdown da HeroSection para consistência.
+// O hook de countdown permanece o mesmo
 const useCountdown = (initialDays = 2) => {
   const [timeLeft, setTimeLeft] = React.useState({
     days: initialDays, hours: 14, minutes: 32, seconds: 45
@@ -30,16 +30,18 @@ const useCountdown = (initialDays = 2) => {
   };
 };
 
-// Dados da oferta, para manter o JSX limpo.
-const offerItems = [
-  { icon: CheckCircle, title: 'Treinamento Completo Empilha+ Plus', description: 'Acesso total ao curso de Operador de Empilhadeira com certificação nacional.' },
-  { icon: CheckCircle, title: 'Material Didático Completo', description: 'Apostilas em PDF, videoaulas e materiais de apoio para download.' },
-  { icon: CheckCircle, title: 'Suporte com Especialistas', description: 'Tire suas dúvidas diretamente com nossos instrutores sempre que precisar.' },
+// ==================================================================
+// ▼▼▼ NOVA ESTRUTURA DE DADOS PARA A OFERTA ▼▼▼
+// ==================================================================
+const kitItems = [
+  { icon: CheckCircle, title: 'NR-01: Disposições Gerais e GRO', description: 'A base para a gestão de segurança e conformidade da sua empresa.' },
+  { icon: CheckCircle, title: 'NR-06: Equipamento de Proteção Individual (EPI)', description: 'Treinamento essencial sobre o uso, guarda e conservação dos EPIs.' },
+  { icon: CheckCircle, title: 'NR-35: Trabalho em Altura', description: 'Capacitação obrigatória para todos que trabalham acima de 2 metros do solo.' },
 ];
 
 const bonusItems = [
-  { icon: Gift, title: 'BÔNUS #1: Checklist de Inspeção Diária', description: 'Modelo profissional usado pelas melhores empresas do Brasil.', value: 97 },
-  { icon: Gift, title: 'BÔNUS #2: Guia de Normas de Segurança', description: 'Manual prático e resumido das principais NRs aplicáveis.', value: 47 },
+  { icon: Gift, title: 'BÔNUS #1: Guia Prático de Primeiros Socorros', description: 'Manual em PDF para ações rápidas em caso de acidentes.', value: 47 },
+  { icon: Gift, title: 'BÔNUS #2: Planilha de Controle de EPIs', description: 'Modelo pronto para gerenciar a entrega e validade dos equipamentos.', value: 97 },
 ];
 
 
@@ -47,40 +49,39 @@ const OfferSection = () => {
   const timeLeft = useCountdown();
 
   const handleCheckout = () => {
-    alert('Redirecionando para o checkout...');
+    alert('Redirecionando para o checkout do PACOTE DE SEGURANÇA ESSENCIAL...');
   };
 
   return (
-    // DECISÃO DE DESIGN:
-    // Fundo consistente com a HeroSection. O layout principal agora é um grid de duas colunas
-    // para separar a oferta (esquerda) da ação de compra (direita).
     <section id="checkout" className="relative bg-slate-900 text-white py-24 lg:py-32">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-5"></div>
         <div className="absolute bottom-0 left-0 -z-10 h-1/2 w-full [mask-image:radial-gradient(100%_50%_at_center,white,transparent)] bg-gradient-to-t from-yellow-500/20 to-slate-900 opacity-50"></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Cabeçalho da Seção */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 px-4 py-1.5 text-sm font-semibold text-yellow-400 border border-yellow-500/20 mb-4">
             <Zap size={16} />
-            Sua Última Oportunidade
+            Oferta Exclusiva por Tempo Limitado
           </span>
+          {/* Título alterado para focar no pacote */}
           <h2 className="text-4xl lg:text-5xl font-black tracking-tighter">
-            Uma Oferta Completa Para Sua Certificação Profissional
+            Adquira o Pacote de Segurança Essencial
           </h2>
           <p className="text-lg text-slate-400 mt-4">
-            Tudo o que você precisa para se tornar um operador qualificado, com segurança e reconhecimento nacional, está incluso no pacote abaixo.
+            Os 3 treinamentos mais importantes para a conformidade de qualquer empresa, juntos em uma oferta com desconto imperdível.
           </p>
         </div>
 
-        {/* Grid Principal */}
         <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
-
-          {/* Coluna Esquerda: O que você vai levar (Empilhamento de Valor) */}
+          {/* Coluna Esquerda: Itens do Pacote */}
           <div className="lg:col-span-3 bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold mb-6">O Que Você Recebe Imediatamente:</h3>
+            <h3 className="flex items-center gap-3 text-2xl font-bold mb-6">
+              <Package size={28}/>
+              O que está incluso no Pacote:
+            </h3>
             <div className="space-y-5">
-              {offerItems.map((item, index) => (
+              {/* Mapeando os novos itens do KIT */}
+              {kitItems.map((item, index) => (
                 <OfferItem key={index} icon={item.icon} title={item.title} description={item.description} />
               ))}
             </div>
@@ -95,17 +96,20 @@ const OfferSection = () => {
             </div>
           </div>
 
-          {/* Coluna Direita: Caixa de Ação (Preço, Urgência e Compra) */}
+          {/* Coluna Direita: Caixa de Ação */}
           <div className="lg:col-span-2">
             <div className="sticky top-10 bg-slate-800 border-2 border-yellow-400 rounded-2xl p-8 shadow-2xl shadow-yellow-500/10">
-              {/* Preço */}
-              <p className="text-slate-400 text-center">De <span className="line-through">R$ 497,00</span> por apenas:</p>
-              <p className="text-5xl lg:text-6xl font-black text-center text-yellow-400 my-2">R$ 197</p>
-              <p className="text-lg text-slate-300 text-center mb-6">ou 12x de R$ 19,78 no cartão</p>
+              <div className="text-center mb-4">
+                <span className="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">ECONOMIZE R$ 90,00</span>
+              </div>
+              
+              {/* Preços atualizados para o pacote */}
+              <p className="text-slate-400 text-center">De <span className="line-through">R$ 387,00</span> por apenas:</p>
+              <p className="text-5xl lg:text-6xl font-black text-center text-yellow-400 my-2">R$ 297</p>
+              <p className="text-lg text-slate-300 text-center mb-6">ou 12x de R$ 29,82 no cartão</p>
 
-              {/* Countdown */}
               <div className="my-6">
-                <p className="text-center text-sm font-bold text-slate-400 mb-2">Esta condição especial termina em:</p>
+                <p className="text-center text-sm font-bold text-slate-400 mb-2">Esta oferta especial termina em:</p>
                 <div className="grid grid-cols-4 gap-2 text-center">
                   <CountdownUnit value={timeLeft.days} label="DIAS" />
                   <CountdownUnit value={timeLeft.hours} label="HRS" />
@@ -114,22 +118,21 @@ const OfferSection = () => {
                 </div>
               </div>
 
-              {/* Botão CTA */}
+              {/* Botão CTA atualizado */}
               <button
                 onClick={handleCheckout}
                 className="group w-full relative flex items-center justify-center gap-2 text-xl font-bold bg-yellow-500 text-slate-900 px-8 py-4 rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
               >
-                <span>QUERO ME CAPACITAR AGORA</span>
+                <span>QUERO O PACOTE COM DESCONTO</span>
                 <ArrowRight size={24} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
               <p className="text-center text-xs text-slate-400 mt-2">Pagamento 100% seguro. Acesso imediato.</p>
               
-              {/* Garantia */}
               <div className="mt-6 pt-6 border-t border-slate-700 flex items-center gap-4">
                 <ShieldCheck size={48} className="text-yellow-400 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-white">Garantia Blindada de 30 Dias</h4>
-                  <p className="text-sm text-slate-400">Seu risco é zero. Se não gostar, devolvemos 100% do seu dinheiro.</p>
+                  <p className="text-sm text-slate-400">Seu risco é zero. Se não for o que você busca, devolvemos 100% do seu dinheiro.</p>
                 </div>
               </div>
             </div>
@@ -140,11 +143,12 @@ const OfferSection = () => {
   );
 };
 
-// Componente auxiliar para os itens da oferta
+// Componentes auxiliares (OfferItem e CountdownUnit) permanecem os mesmos
+
 const OfferItem = ({ icon: Icon, title, description, value }: any) => (
   <div className="flex items-start gap-4">
     <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center">
-      <Icon className={value ? "text-yellow-400" : "text-slate-300"} size={22} />
+      <Icon className={value ? "text-yellow-400" : "text-green-500"} size={22} />
     </div>
     <div>
       <h4 className="font-bold text-white">{title}</h4>
@@ -159,7 +163,6 @@ const OfferItem = ({ icon: Icon, title, description, value }: any) => (
   </div>
 );
 
-// Componente auxiliar para o countdown
 const CountdownUnit = ({ value, label }: { value: string, label: string }) => (
   <div className="bg-slate-900/70 p-2 rounded-md">
     <div className="text-2xl font-black tracking-tighter">{value}</div>

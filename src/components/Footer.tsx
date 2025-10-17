@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   Phone, 
   Mail, 
@@ -85,7 +84,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => scrollToSection('treinamentos')}
+                  onClick={() => scrollToSection('lista-de-cursos')}
                   className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
                 >
                   Treinamentos
@@ -124,17 +123,17 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-center space-x-3">
                 <Phone className="text-yellow-400 flex-shrink-0" size={18} />
-                <span className="text-gray-300">(11) 99999-9999</span>
+                <span className="text-gray-300">(21) 98213-4226</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="text-yellow-400 flex-shrink-0" size={18} />
-                <span className="text-gray-300">contato@empilhaplus.com.br</span>
+                <span className="text-gray-300">empilhaplus@gmail.com</span>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="text-yellow-400 flex-shrink-0 mt-1" size={18} />
                 <div className="text-gray-300">
-                  <p>Rua da Segurança, 123</p>
-                  <p>São Paulo, SP</p>
+                  <p>Av. Brasil, 12.055</p>
+                  <p>Rio de Janeiro/RJ</p>
                   <p>CEP 01234-567</p>
                 </div>
               </li>
@@ -173,7 +172,7 @@ const Footer = () => {
             </div>
             
             <div className="text-gray-400 text-sm">
-              CNPJ: 00.000.000/0001-00
+              CNPJ: 35.077.899/0001-25
             </div>
           </div>
         </div>

@@ -1,103 +1,89 @@
-import React, { useState } from 'react';
-import { Menu, X, Phone, ShoppingCart } from 'lucide-react';
+import  { useState } from 'react';
+import { Menu, X, Phone, Mail } from 'lucide-react'; // Adicionados os ícones de Phone e Mail
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
-  };
-
-  const handleCheckout = () => {
-    // Link para checkout - será substituído pelo link real
-    window.open('#checkout', '_blank');
-  };
+  // ==================================================================
+  // ▼▼▼ LISTA DE LINKS ATUALIZADA (SEM "DEPOIMENTOS") ▼▼▼
+  // ==================================================================
+  const navLinks = [
+    { href: '#home', label: 'Casa' },
+    { href: '#lista-de-cursos', label: 'Treinamentos' },
+    // O link para "Depoimentos" foi removido daqui
+    { href: '#faq', label: 'Perguntas Frequentes' },
+    { href: '#contato', label: 'Contato' },
+  ];
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-black font-bold text-xl">E+</span>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Empilha+Plus</h1>
-              <p className="text-sm text-gray-600">Treinamentos</p>
-            </div>
-          </div>
+    // Adicionamos a classe 'shadow-md' para um sombreamento mais pronunciado
+    <header className="bg-white/95 backdrop-blur-sm sticky top-0 z-40 shadow-md">
+      
+      {/* ================================================================== */}
+      {/* ▼▼▼ NOVA SEÇÃO: BARRA SUPERIOR DE CONTATO ▼▼▼ */}
+      {/* ================================================================== */}
+      <div className="hidden md:block bg-slate-800 text-white text-sm py-2">
+        <div className="container mx-auto px-4 flex justify-end items-center gap-6">
+          <a href="tel:+5521982134226" className="flex items-center gap-2 hover:text-yellow-400 transition-colors">
+            <Phone size={16} />
+            <span>(21) 98213-4226</span>
+          </a>
+          <a href="mailto:empilhaplus@gmail.com" className="flex items-center gap-2 hover:text-yellow-400 transition-colors">
+            <Mail size={16} />
+            <span>empilhaplus@gmail.com</span>
+          </a>
+        </div>
+      </div>
+      {/* ▲▲▲ FIM DA BARRA SUPERIOR ▲▲▲ */}
+      {/* ================================================================== */}
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-              Home
-            </button>
-            <button onClick={() => scrollToSection('treinamentos')} className="text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-              Treinamentos
-            </button>
-            <button onClick={() => scrollToSection('depoimentos')} className="text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-              Depoimentos
-            </button>
-            <button onClick={() => scrollToSection('faq')} className="text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-              FAQ
-            </button>
-            <button onClick={() => scrollToSection('contato')} className="text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-              Contato
-            </button>
-          </nav>
-
-          {/* CTA Button */}
-          <button
-            onClick={handleCheckout}
-            className="hidden md:flex bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-6 py-3 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 items-center space-x-2 shadow-lg"
-          >
-            <ShoppingCart size={20} />
-            <span>Quero Me Capacitar Agora</span>
-          </button>
-
-          {/* Mobile menu button */}
-          <button 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-gray-700 hover:text-yellow-600 transition-colors"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+      {/* Navegação Principal */}
+      <nav className="container mx-auto px-4 flex justify-between items-center h-20">
+        {/* Logo */}
+        <div className="text-2xl font-bold text-gray-800">
+          <span className="bg-yellow-400 text-black px-2 py-1 rounded-md">E+</span>
+          <span className="ml-2">Empilha+Plus</span>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            <nav className="flex flex-col space-y-4">
-              <button onClick={() => scrollToSection('home')} className="text-left text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-                Home
-              </button>
-              <button onClick={() => scrollToSection('treinamentos')} className="text-left text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-                Treinamentos
-              </button>
-              <button onClick={() => scrollToSection('depoimentos')} className="text-left text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-                Depoimentos
-              </button>
-              <button onClick={() => scrollToSection('faq')} className="text-left text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-                FAQ
-              </button>
-              <button onClick={() => scrollToSection('contato')} className="text-left text-gray-700 hover:text-yellow-600 font-medium transition-colors">
-                Contato
-              </button>
-              <button
-                onClick={handleCheckout}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-6 py-3 rounded-lg font-bold transition-all duration-300 text-center"
-              >
-                Quero Me Capacitar Agora
-              </button>
-            </nav>
+        {/* Links do Desktop */}
+        <div className="hidden md:flex items-center space-x-8">
+          {navLinks.map((link) => (
+            <a key={link.label} href={link.href} className="text-gray-600 hover:text-yellow-600 font-semibold transition-colors">
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Botões do Desktop */}
+        <div className="hidden md:flex items-center space-x-4">
+          <a href="#checkout" className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-lg font-bold transition-colors">
+            Quero Me Capacitar Agora
+          </a>
+        </div>
+
+        {/* Botão do Menu Mobile */}
+        <div className="md:hidden">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Menu Mobile */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white py-4 px-4 border-t">
+          <div className="flex flex-col space-y-4">
+            {navLinks.map((link) => (
+              <a key={link.label} href={link.href} onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-yellow-600 font-semibold py-2">
+                {link.label}
+              </a>
+            ))}
+            <a href="#checkout" onClick={() => setIsMenuOpen(false)} className="bg-yellow-400 hover:bg-yellow-500 text-black text-center px-6 py-3 rounded-lg font-bold transition-colors mt-4">
+              Quero Me Capacitar Agora
+            </a>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 };

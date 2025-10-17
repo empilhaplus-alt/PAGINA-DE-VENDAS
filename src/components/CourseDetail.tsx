@@ -1,98 +1,76 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Outlet, useOutletContext } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, User, Building } from 'lucide-react';
 
-// Interface com todos os campos da sua tabela
 interface CursoCompleto {
   id: string;
   title: string;
   norma: string;
-  instructor_type: string;
-  modality: string;
-  workload_hours: number;
-  price_individual: number;
-  price_company: number;
   category: string;
-  description: string;
+  image_url: string;
 }
 
+const CourseChoice = () => {
+  const { curso } = useOutletContext<{ curso: CursoCompleto }>();
+
+  return (
+    <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+      <h2 className="text-2xl font-bold text-slate-800 mb-2">Como você deseja se inscrever?</h2>
+      <p className="text-slate-500 mb-8">Selecione uma opção abaixo para ver os detalhes.</p>
+      <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <Link to="pf" className="block p-6 border-2 border-slate-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all duration-300">
+          <User className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-slate-800">Pessoa Física</h3>
+          <p className="text-slate-500">Inscrição individual</p>
+        </Link>
+        <Link to="pj" state={{ initialCourseId: curso.id }} className="block p-6 border-2 border-slate-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all duration-300">
+          <Building className="w-12 h-12 text-green-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-slate-800">Pessoa Jurídica</h3>
+          <p className="text-slate-500">Orçamento para empresas</p>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 const CourseDetail = () => {
-  const { id } = useParams<{ id: string }>(); // Pega o ID da URL
+  const { id } = useParams<{ id: string }>();
   const [curso, setCurso] = useState<CursoCompleto | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCurso = async () => {
       if (!id) return;
-
-      const { data, error } = await supabase
-        .from('courses')
-        .select('*')
-        .eq('id', id)
-        .single(); // .single() para buscar apenas um registro
-
-      if (error) {
-        console.error('Erro ao buscar detalhes do curso:', error);
-      } else {
-        setCurso(data);
-      }
+      const { data, error } = await supabase.from('courses').select('*').eq('id', id).single();
+      if (error) console.error('Erro:', error);
+      else setCurso(data);
       setLoading(false);
     };
-
     fetchCurso();
   }, [id]);
 
-  if (loading) {
-    return <p className="text-center py-20">Carregando detalhes do curso...</p>;
-  }
-
-  if (!curso) {
-    return <p className="text-center py-20">Curso não encontrado.</p>;
-  }
+  if (loading) return <p className="text-center py-20">Carregando...</p>;
+  if (!curso) return <p className="text-center py-20">Curso não encontrado.</p>;
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="container mx-auto p-4 sm:p-8">
-        <Link to="/#lista-de-cursos" className="inline-flex items-center gap-2 text-blue-600 hover:underline mb-6">
+    <div className="bg-gray-100 min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        <Link to="/#lista-de-cursos" className="inline-flex items-center gap-2 text-blue-600 hover:underline mb-8">
           <ArrowLeft size={18} />
           Voltar para a lista de cursos
         </Link>
         
-        <div className="bg-white p-8 rounded-xl shadow-lg">
-          <div className="mb-6">
-            <p className="text-sm font-semibold text-yellow-600">{curso.category}</p>
-            <h1 className="text-4xl font-bold text-blue-900">{curso.norma} - {curso.title}</h1>
-          </div>
-
-          <p className="text-lg text-gray-700 mb-8">{curso.description}</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-t pt-8">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-1">Carga Horária</h3>
-              <p>{curso.workload_hours} horas</p>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-1">Modalidade</h3>
-              <p>{curso.modality}</p>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-1">Tipo de Instrutor</h3>
-              <p>{curso.instructor_type}</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-1">Preço (Individual)</h3>
-              <p>R$ {curso.price_individual}</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-1">Preço (Para Empresas)</h3>
-              <p>R$ {curso.price_company}</p>
-            </div>
-          </div>
+        <div className="mb-6">
+          <p className="text-sm font-semibold text-yellow-600">{curso.category}</p>
+          <h1 className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight">{curso.norma} - {curso.title}</h1>
         </div>
+
+        <Outlet context={{ curso }} />
       </div>
     </div>
   );
 };
 
+export { CourseChoice };
 export default CourseDetail;

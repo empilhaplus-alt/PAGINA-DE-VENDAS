@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Play, ArrowRight, ShieldCheck } from 'lucide-react';
 
 // Hook personalizado para o countdown, mantendo a lógica de negócio separada do design.
 const useCountdown = () => {
@@ -20,8 +20,7 @@ const useCountdown = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // CORREÇÃO: Adicionamos o tipo 'number' ao parâmetro 'time'.
-  const formatTime = (time: number) => String(time).padStart(2, '0');
+   const formatTime = (time: number) => String(time).padStart(2, '0');
 
   return {
     days: formatTime(timeLeft.days),
@@ -34,15 +33,17 @@ const useCountdown = () => {
 const HeroSection = () => {
   const timeLeft = useCountdown();
 
-  const handleCheckout = () => {
-    // Idealmente, isso deveria rolar para uma seção, não abrir uma nova aba.
-    // window.location.hash = "checkout"; 
-    alert('Redirecionando para o checkout...');
+  const handleScrollToCourses = () => {
+    const courseSection = document.getElementById('lista-de-cursos');
+    if (courseSection) {
+      courseSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleVideoPlay = () => {
     alert('Vídeo de apresentação será reproduzido aqui');
   };
+
 
   return (
     <section id="home" className="relative overflow-hidden bg-slate-900 text-white py-24 lg:py-32">
@@ -55,7 +56,7 @@ const HeroSection = () => {
           
           {/* Coluna Esquerda: Conteúdo e Chamada para Ação */}
           <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 px-4 py-1.5 text-sm font-semibold text-yellow-400 border border-yellow-500/20 mb-6">
+            <span className="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 px-4 py-1.5 text-sm font-montserrat text-yellow-400 border border-yellow-500/20 mb-6">
               <ShieldCheck size={16} />
               Certificação Válida em Todo o Brasil
             </span>
@@ -65,24 +66,17 @@ const HeroSection = () => {
             </h1>
             
             <h2 className="text-lg md:text-xl text-slate-400 max-w-xl mx-auto lg:mx-0 mb-8">
-              Da operação de empilhadeiras às NRs essenciais, a <span className="text-yellow-400 font-semibold">Empilha+ Plus</span> oferece o portfólio de treinamentos que sua equipe precisa para trabalhar com máxima segurança e eficiência.
+              Da operação de empilhadeiras às NRs essenciais, a <span className="text-yellow-400 font-montserrat">Empilha+ Plus</span> oferece o portfólio de treinamentos que sua equipe precisa para trabalhar com máxima segurança e eficiência.
             </h2>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left max-w-md mx-auto lg:mx-0 mb-10">
-              {['Aulas práticas e teóricas', 'Instrutores especializados', 'Suporte pós-treinamento', 'Acesso vitalício ao material'].map(feature => (
-                <div key={feature} className="flex items-center gap-3">
-                  <CheckCircle className="text-yellow-500 flex-shrink-0" size={20} />
-                  <span className="text-slate-300">{feature}</span>
-                </div>
-              ))}
-            </div>
-
+            {/* ▼▼▼ SEÇÃO DOS BOTÕES ATUALIZADA ▼▼▼ */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button
-                onClick={handleCheckout}
+                onClick={handleScrollToCourses} // Ação alterada para rolar a página
                 className="group relative inline-flex items-center justify-center gap-2 text-lg font-bold bg-yellow-500 text-slate-900 px-8 py-4 rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
               >
-                <span>Garantir Minha Vaga</span>
+                {/* Texto do CTA alterado */}
+                <span>Ver Nossos Cursos</span>
                 <ArrowRight size={22} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
               
@@ -91,6 +85,7 @@ const HeroSection = () => {
                 className="group inline-flex items-center justify-center gap-2 text-lg font-bold text-yellow-400 bg-slate-900/50 border-2 border-slate-700 px-8 py-4 rounded-lg transition-all duration-300 hover:border-yellow-400 hover:bg-slate-800"
               >
                 <Play size={20} className="fill-yellow-400" />
+                {/* O texto deste botão permanece o mesmo */}
                 <span>Ver Apresentação</span>
               </button>
             </div>

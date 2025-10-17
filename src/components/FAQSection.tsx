@@ -7,7 +7,7 @@ const FAQSection = () => {
   const faqs = [
     {
       question: 'Quanto tempo tenho de acesso ao treinamento?',
-      answer: 'Você terá acesso vitalício ao treinamento! Isso significa que pode estudar no seu ritmo, revisar o conteúdo quantas vezes quiser e sempre ter acesso às atualizações que fizermos no curso.'
+      answer: 'Você terá acesso ao treinamento por 1 ano! Isso significa que pode estudar no seu ritmo, revisar o conteúdo quantas vezes quiser dentro do período e terá acesso às todas as atualizações que fizermos no curso.'
     },
     {
       question: 'O certificado é aceito em todo o Brasil?',
@@ -35,7 +35,7 @@ const FAQSection = () => {
     },
     {
       question: 'O que acontece se eu não conseguir aprender?',
-      answer: 'Nosso método é comprovadamente eficaz, mas se por qualquer motivo você não conseguir aprender ou não ficar satisfeito, devolvemos 100% do seu dinheiro em até 30 dias. Sem perguntas, sem complicações.'
+      answer: 'Nosso método é comprovadamente eficaz, mas se por qualquer motivo você não conseguir aprender, colocaremos todo o nosso pessoal para lhe auxiliar até você ficar 100% satisfeito. Sem perguntas, sem complicações.'
     },
     {
       question: 'Preciso ter experiência prévia?',
