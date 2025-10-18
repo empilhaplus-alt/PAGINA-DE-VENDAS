@@ -132,7 +132,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">E-mail</h4>
-                    <a href="mailto:empilhaplustreinamentos@gmail.com" className="text-gray-600 hover:underline">empilhaplus@gmail.com</a>
+                    <a href="mailto:empilhaplus@gmail.com" className="text-gray-600 hover:underline">empilhaplus@gmail.com</a>
                     <p className="text-sm text-gray-500">Resposta em até 2 horas</p>
                   </div>
                 </div>
@@ -202,7 +202,7 @@ const ContactSection = () => {
                   <button type="button" onClick={handleWhatsApp} className="flex-1 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors duration-300 flex items-center justify-center space-x-2">
                     {/* Ícone do WhatsApp substituído aqui */}
                     <FaWhatsapp size={22} />
-                    <span>WhatsApp</span>
+                    <span> WhatsApp </span>
                   </button>
                 </div>
               </form>

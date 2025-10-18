@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle, Gift, ArrowRight, ShieldCheck, Zap, Package } from 'lucide-react';
 
-// O hook de countdown permanece o mesmo
+// Hook de countdown (pode ser importado de outro arquivo se preferir)
 const useCountdown = (initialDays = 2) => {
   const [timeLeft, setTimeLeft] = React.useState({
     days: initialDays, hours: 14, minutes: 32, seconds: 45
@@ -30,9 +30,7 @@ const useCountdown = (initialDays = 2) => {
   };
 };
 
-// ==================================================================
-// ▼▼▼ NOVA ESTRUTURA DE DADOS PARA A OFERTA ▼▼▼
-// ==================================================================
+// Dados da oferta
 const kitItems = [
   { icon: CheckCircle, title: 'NR-01: Disposições Gerais e GRO', description: 'A base para a gestão de segurança e conformidade da sua empresa.' },
   { icon: CheckCircle, title: 'NR-06: Equipamento de Proteção Individual (EPI)', description: 'Treinamento essencial sobre o uso, guarda e conservação dos EPIs.' },
@@ -48,8 +46,20 @@ const bonusItems = [
 const OfferSection = () => {
   const timeLeft = useCountdown();
 
-  const handleCheckout = () => {
-    alert('Redirecionando para o checkout do PACOTE DE SEGURANÇA ESSENCIAL...');
+  // ▼▼▼ INSIRA O LINK DE CHECKOUT DO SEU PACOTE AQUI ▼▼▼
+  const packageCheckoutUrl = 'SEU_LINK_DE_CHECKOUT_ESPECIFICO_DO_PACOTE_AQUI';
+
+  const handlePackageCheckout = () => {
+    if (packageCheckoutUrl && packageCheckoutUrl !== 'SEU_LINK_DE_CHECKOUT_ESPECIFICO_DO_PACOTE_AQUI') {
+      window.open(packageCheckoutUrl, '_blank');
+    } else {
+      // Se não houver link, rola para a seção de contato como fallback
+      const contactSection = document.getElementById('contato');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      alert('Link de checkout do pacote não configurado. Entrando em contato...');
+    }
   };
 
   return (
@@ -63,7 +73,6 @@ const OfferSection = () => {
             <Zap size={16} />
             Oferta Exclusiva por Tempo Limitado
           </span>
-          {/* Título alterado para focar no pacote */}
           <h2 className="text-4xl lg:text-5xl font-black tracking-tighter">
             Adquira o Pacote de Segurança Essencial
           </h2>
@@ -80,7 +89,6 @@ const OfferSection = () => {
               O que está incluso no Pacote:
             </h3>
             <div className="space-y-5">
-              {/* Mapeando os novos itens do KIT */}
               {kitItems.map((item, index) => (
                 <OfferItem key={index} icon={item.icon} title={item.title} description={item.description} />
               ))}
@@ -103,7 +111,6 @@ const OfferSection = () => {
                 <span className="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">ECONOMIZE R$ 90,00</span>
               </div>
               
-              {/* Preços atualizados para o pacote */}
               <p className="text-slate-400 text-center">De <span className="line-through">R$ 387,00</span> por apenas:</p>
               <p className="text-5xl lg:text-6xl font-black text-center text-yellow-400 my-2">R$ 297</p>
               <p className="text-lg text-slate-300 text-center mb-6">ou 12x de R$ 29,82 no cartão</p>
@@ -118,9 +125,8 @@ const OfferSection = () => {
                 </div>
               </div>
 
-              {/* Botão CTA atualizado */}
               <button
-                onClick={handleCheckout}
+                onClick={handlePackageCheckout}
                 className="group w-full relative flex items-center justify-center gap-2 text-xl font-bold bg-yellow-500 text-slate-900 px-8 py-4 rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
               >
                 <span>QUERO O PACOTE COM DESCONTO</span>
@@ -132,7 +138,7 @@ const OfferSection = () => {
                 <ShieldCheck size={48} className="text-yellow-400 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-white">Garantia Blindada de 30 Dias</h4>
-                  <p className="text-sm text-slate-400">Seu risco é zero. Se não for o que você busca, devolvemos 100% do seu dinheiro.</p>
+                  <p className="text-sm text-slate-400">Seu risco é zero. Se não gostar, devolvemos 100% do seu dinheiro.</p>
                 </div>
               </div>
             </div>
@@ -143,9 +149,8 @@ const OfferSection = () => {
   );
 };
 
-// Componentes auxiliares (OfferItem e CountdownUnit) permanecem os mesmos
-
-const OfferItem = ({ icon: Icon, title, description, value }: any) => (
+// Componente auxiliar para os itens da oferta
+const OfferItem = ({ icon: Icon, title, description, value }: { icon: React.ElementType, title: string, description: string, value?: number }) => (
   <div className="flex items-start gap-4">
     <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center">
       <Icon className={value ? "text-yellow-400" : "text-green-500"} size={22} />
@@ -163,6 +168,7 @@ const OfferItem = ({ icon: Icon, title, description, value }: any) => (
   </div>
 );
 
+// Componente auxiliar para o countdown
 const CountdownUnit = ({ value, label }: { value: string, label: string }) => (
   <div className="bg-slate-900/70 p-2 rounded-md">
     <div className="text-2xl font-black tracking-tighter">{value}</div>

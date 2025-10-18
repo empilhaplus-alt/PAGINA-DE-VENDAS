@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
+// import { supabase } from '../lib/supabaseClient'; // <-- This line was removed
 import { Clock, Film, ShieldCheck, ShoppingCart, Calendar, BookOpen } from 'lucide-react';
 import CurriculumModal from './CurriculumModal';
 
-// A interface agora inclui a lista de tópicos
+// Interface completa do curso, incluindo os campos adicionados
 interface CursoCompleto {
   id: string;
   title: string;
@@ -13,17 +14,21 @@ interface CursoCompleto {
   workload_hours: number;
   price_individual: number;
   description: string;
-  image_url: string; 
+  image_url: string;
   validity_months?: number;
-  curriculum_topics?: string[]; // Adicionamos o novo campo
+  curriculum_topics?: string[];
+  checkout_url?: string;
 }
 
 const IndividualCourseView = () => {
-    // Os dados do curso (incluindo os tópicos) já vêm do componente pai
+    // Busca os dados do curso passados pelo componente pai (CourseDetail)
     const { curso } = useOutletContext<{ curso: CursoCompleto }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Não precisamos mais do useEffect para buscar o currículo!
+    // Garante que 'curso' existe antes de tentar acessá-lo (caso raro, mas seguro)
+    if (!curso) {
+      return <p className="text-center py-10">Carregando dados do curso...</p>;
+    }
 
     return (
       <>
@@ -53,7 +58,8 @@ const IndividualCourseView = () => {
               {/* Botão do Conteúdo Programático */}
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2 text-center bg-blue-100 text-blue-700 font-semibold py-3 rounded-lg transition-colors duration-300 hover:bg-blue-200 mb-6"
+                disabled={!curso.curriculum_topics || curso.curriculum_topics.length === 0}
+                className="w-full flex items-center justify-center gap-2 text-center bg-blue-100 text-blue-700 font-semibold py-3 rounded-lg transition-colors duration-300 hover:bg-blue-200 mb-6 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
               >
                 <BookOpen size={18} />
                 Ver Conteúdo Programático
@@ -62,7 +68,12 @@ const IndividualCourseView = () => {
               <div className="mt-auto pt-6 border-t border-gray-200">
                 <p className="text-slate-500">Valor para inscrição individual:</p>
                 <p className="text-4xl font-black text-green-600 my-2">R$ {curso.price_individual.toFixed(2).replace('.', ',')}</p>
-                <a href="#checkout" className="w-full mt-4 flex items-center justify-center gap-2 text-center bg-green-500 text-white font-semibold py-3.5 rounded-lg text-lg transition-colors duration-300 hover:bg-green-600">
+                <a
+                  href={curso.checkout_url || '#contato'} // Usa o link do curso ou #contato se não existir
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full mt-4 flex items-center justify-center gap-2 text-center bg-green-500 text-white font-semibold py-3.5 rounded-lg text-lg transition-colors duration-300 hover:bg-green-600 ${!curso.checkout_url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
                   <ShoppingCart size={20} />
                   Realizar Inscrição
                 </a>
@@ -81,6 +92,7 @@ const IndividualCourseView = () => {
     );
 };
 
+// Componente auxiliar para os itens de detalhe
 const DetailItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string }) => (
   <div className="flex items-center text-slate-600">
     <Icon className="w-5 h-5 mr-3 text-blue-500" />
