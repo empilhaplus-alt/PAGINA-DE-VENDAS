@@ -3,14 +3,13 @@ import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
 
-// 1. Adicionada a propriedade checkout_url à interface
 interface Curso {
   id: string;
   norma: string;
   title: string;
-  image_url: string;
+  image_url: string; // Garantir que image_url está aqui
   price_individual: number;
-  checkout_url?: string; // Tornamos opcional com '?'
+  checkout_url?: string;
 }
 
 const CoursesList = () => {
@@ -19,10 +18,10 @@ const CoursesList = () => {
 
   useEffect(() => {
     const fetchCursos = async () => {
-      // 2. Adicionamos checkout_url à query
+      // Garantir que estamos buscando image_url
       const { data, error } = await supabase
         .from('courses')
-        .select('id, norma, title, image_url, price_individual, checkout_url')
+        .select('id, norma, title, image_url, price_individual, checkout_url, ordem_exibicao') // Adicionado image_url e ordem_exibicao
         .order('ordem_exibicao', { ascending: true });
 
       if (error) {
@@ -40,13 +39,49 @@ const CoursesList = () => {
   return (
     <section id="lista-de-cursos" className="py-20 bg-gray-100">
       <div className="container mx-auto px-4">
-        {/* ... (cabeçalho da seção) ... */}
+        <h2 className="text-4xl font-black text-center text-slate-800 mb-4 tracking-tight">
+          Conheça Nossos Treinamentos
+        </h2>
+        <p className="text-center text-lg text-slate-600 mb-12">
+          Cursos completos para capacitar sua equipe e garantir a conformidade da sua empresa.
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {cursos.map((curso) => (
             <div key={curso.id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
               
-              {/* ... (código da imagem) ... */}
+              {/* ================================================================== */}
+              {/* ▼▼▼ BLOCO DA IMAGEM RESTAURADO AQUI ▼▼▼ */}
+              {/* ================================================================== */}
+              <div
+                className="relative h-32 flex items-center justify-center p-2"
+                style={{
+                  backgroundImage: `url('https://mavsxyowcvvirqtvzbms.supabase.co/storage/v1/object/public/logos%20dos%20cursos/Design%20sem%20nome%20(2)%20(1).webp')`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                {/* Overlay sutil */}
+                <div className="absolute inset-0 bg-black/50"></div>
+                
+                {/* Logo do Curso ou Placeholder */}
+                {curso.image_url ? (
+                  <img
+                    src={curso.image_url}
+                    alt={`Capa do curso ${curso.title}`}
+                    // Usamos max-h-full para garantir que a imagem não estoure a altura do container
+                    className="relative z-10 max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="relative z-10 flex items-center justify-center h-full w-full">
+                    <span className="bg-white/80 backdrop-blur-sm text-gray-700 text-sm font-semibold px-4 py-2 rounded-md">
+                      Sem Imagem
+                    </span>
+                  </div>
+                )}
+              </div>
+              {/* ▲▲▲ FIM DO BLOCO DA IMAGEM ▲▲▲ */}
+              {/* ================================================================== */}
 
               {/* Conteúdo do Card */}
               <div className="p-4 flex flex-col flex-grow">
@@ -64,12 +99,11 @@ const CoursesList = () => {
                   >
                     Detalhes
                   </Link>
-                  {/* 3. Botão "Comprar" agora usa o link dinâmico */}
                   <a
-                    href={curso.checkout_url || '#contato'} // Usa o link do curso ou volta para #contato se não houver link
-                    target="_blank" // Abre o checkout em uma nova aba
+                    href={curso.checkout_url || '#contato'}
+                    target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-1.5 text-center bg-green-500 text-white font-semibold py-2 rounded-md text-sm transition-colors duration-300 hover:bg-green-600"
+                    className="w-full flex items-center justify-center gap-1.5 text-center bg-yellow-400 text-gray-800 font-semibold py-2 rounded-md text-sm transition-colors duration-300 hover:bg-yellow-600"
                   >
                     <ShoppingCart size={14} />
                     Comprar
